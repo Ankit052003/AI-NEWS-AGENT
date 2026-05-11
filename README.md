@@ -1,4 +1,4 @@
-# News Research Agent
+# AI-NEWS-AGENT
 
 An AI-powered research assistant that turns a news query into a source-backed market research report.
 
