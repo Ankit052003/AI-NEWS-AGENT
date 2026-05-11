@@ -22,16 +22,17 @@ Completed:
 
 - FastAPI backend setup
 - Backend health check endpoint
+- Mocked `POST /research` API with typed request and response schemas
 - Next.js frontend setup
 - Basic research workspace UI
 - Environment configuration structure
 - Clean project folders for future agents, workflows, RAG, memory, routes, services, and schemas
 - Phase 1 setup notes in `docs/phase-01-setup.md`
+- Phase 2 API foundation notes in `docs/phase-02-api-foundation.md`
 - Basic ignore rules and backend Ruff configuration
 
 In progress / planned:
 
-- `POST /research` API
 - Web search integration
 - Article extraction
 - AI summarization
@@ -185,6 +186,21 @@ cd backend
 ruff check app
 ```
 
+Mock research request:
+
+```powershell
+$body = @{
+  query = "Latest AI startup funding news this week"
+  max_sources = 3
+} | ConvertTo-Json
+
+Invoke-RestMethod `
+  -Uri http://localhost:8000/research `
+  -Method Post `
+  -ContentType "application/json" `
+  -Body $body
+```
+
 ### Frontend
 
 ```powershell
@@ -209,10 +225,15 @@ Copy `.env.example` to `.env` and fill values as features are added.
 APP_NAME="News Research Agent"
 ENVIRONMENT=development
 CORS_ORIGINS=["http://localhost:3000"]
+LOG_LEVEL=INFO
 
 OPENAI_API_KEY=
 GEMINI_API_KEY=
 SEARCH_API_KEY=
+
+DEFAULT_LLM_PROVIDER=mock
+DEFAULT_MODEL=mock-news-researcher
+DEFAULT_MAX_SOURCES=5
 
 DATABASE_URL=
 REDIS_URL=
