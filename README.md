@@ -171,7 +171,7 @@ Expected response:
 ```json
 {
   "status": "ok",
-  "service": "news-research-agent"
+  "service": "AI-NEWS-AGENT"
 }
 ```
 
