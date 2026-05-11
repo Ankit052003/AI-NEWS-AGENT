@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.config import get_settings
 from app.routes.health import router as health_router
 
-
 settings = get_settings()
 
 app = FastAPI(title=settings.app_name)

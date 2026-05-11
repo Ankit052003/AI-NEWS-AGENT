@@ -26,6 +26,8 @@ Completed:
 - Basic research workspace UI
 - Environment configuration structure
 - Clean project folders for future agents, workflows, RAG, memory, routes, services, and schemas
+- Phase 1 setup notes in `docs/phase-01-setup.md`
+- Basic ignore rules and backend Ruff configuration
 
 In progress / planned:
 
@@ -171,8 +173,16 @@ Expected response:
 ```json
 {
   "status": "ok",
-  "service": "AI-NEWS-AGENT"
+  "service": "News Research Agent",
+  "environment": "development"
 }
+```
+
+Backend lint:
+
+```powershell
+cd backend
+ruff check app
 ```
 
 ### Frontend
@@ -182,6 +192,8 @@ cd frontend
 npm install
 npm run dev
 ```
+
+If PowerShell blocks `npm.ps1`, use `npm.cmd install` and `npm.cmd run dev`.
 
 Open:
 
