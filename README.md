@@ -233,3 +233,7 @@ REDIS_URL=
 ## What I Want To Demonstrate
 
 This project shows how I think about building production-style AI applications: start with a reliable end-to-end pipeline, keep the architecture modular, add agents only after the core workflow works, and make every output traceable to real sources.
+
+## Author
+
+Ankit Kumar
