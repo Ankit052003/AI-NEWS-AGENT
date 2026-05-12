@@ -6,10 +6,12 @@ from app.schemas.research import (
     ResearchResponse,
     ResearchSource,
 )
+from app.schemas.search import SearchResult
 
 __all__ = [
     "DateRange",
     "ResearchRequest",
     "ResearchResponse",
     "ResearchSource",
+    "SearchResult",
 ]

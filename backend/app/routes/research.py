@@ -19,14 +19,14 @@ def get_research_service() -> ResearchService:
     "",
     response_model=ResearchResponse,
     status_code=status.HTTP_200_OK,
-    summary="Generate a mocked research report",
+    summary="Generate a research report",
 )
 def create_research_report(
     request: ResearchRequest,
     service: Annotated[ResearchService, Depends(get_research_service)],
 ) -> ResearchResponse:
     try:
-        return service.generate_mock_report(request)
+        return service.generate_report(request)
     except ResearchServiceError as exc:
         logger.exception("Research report generation failed")
         raise HTTPException(

@@ -13,6 +13,11 @@ class Settings(BaseSettings):
     openai_api_key: str | None = None
     gemini_api_key: str | None = None
     search_api_key: str | None = None
+    search_provider: str = "newsapi"
+    search_api_base_url: str = "https://newsapi.org/v2/everything"
+    search_language: str = "en"
+    search_sort_by: str = "relevancy"
+    search_timeout_seconds: int = Field(default=10, ge=1, le=60)
 
     default_llm_provider: str = "mock"
     default_model: str = "mock-news-researcher"

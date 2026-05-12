@@ -1,6 +1,8 @@
 from datetime import UTC, date, datetime
 
-from pydantic import BaseModel, ConfigDict, Field, HttpUrl, model_validator
+from pydantic import BaseModel, ConfigDict, Field, model_validator
+
+from app.schemas.search import SearchResult
 
 
 class DateRange(BaseModel):
@@ -43,12 +45,8 @@ class ResearchRequest(BaseModel):
     )
 
 
-class ResearchSource(BaseModel):
-    title: str
-    url: HttpUrl
-    source: str
-    snippet: str
-    published_date: date | None = None
+class ResearchSource(SearchResult):
+    pass
 
 
 class ResearchResponse(BaseModel):
