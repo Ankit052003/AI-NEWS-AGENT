@@ -2,6 +2,7 @@ from datetime import UTC, date, datetime
 
 from pydantic import BaseModel, ConfigDict, Field, model_validator
 
+from app.schemas.article import ExtractedArticle
 from app.schemas.search import SearchResult
 
 
@@ -54,4 +55,5 @@ class ResearchResponse(BaseModel):
     summary: str
     report: str
     sources: list[ResearchSource]
+    articles: list[ExtractedArticle] = Field(default_factory=list)
     generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))

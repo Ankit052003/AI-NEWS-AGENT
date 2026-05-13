@@ -18,6 +18,9 @@ class Settings(BaseSettings):
     search_language: str = "en"
     search_sort_by: str = "relevancy"
     search_timeout_seconds: int = Field(default=10, ge=1, le=60)
+    content_extraction_timeout_seconds: int = Field(default=10, ge=1, le=60)
+    content_extraction_min_words: int = Field(default=80, ge=1, le=500)
+    content_extraction_user_agent: str = "NewsResearchAgent/0.1"
 
     default_llm_provider: str = "mock"
     default_model: str = "mock-news-researcher"

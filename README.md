@@ -25,6 +25,8 @@ Completed:
 - Mocked `POST /research` API with typed request and response schemas
 - NewsAPI-backed web search service for collecting article source links
 - Search result normalization, duplicate URL removal, and basic relevance ranking
+- Article extraction service for fetching source pages and extracting clean text
+- Extracted article response objects with metadata and word counts
 - Next.js frontend setup
 - Basic research workspace UI
 - Environment configuration structure
@@ -32,11 +34,11 @@ Completed:
 - Phase 1 setup notes in `docs/phase-01-setup.md`
 - Phase 2 API foundation notes in `docs/phase-02-api-foundation.md`
 - Phase 3 web search notes in `docs/phase-03-web-search.md`
+- Phase 4 article extraction notes in `docs/phase-04-article-extraction.md`
 - Basic ignore rules and backend Ruff configuration
 
 In progress / planned:
 
-- Article extraction
 - AI summarization
 - Markdown report generation
 - Report history with PostgreSQL
@@ -204,8 +206,8 @@ Invoke-RestMethod `
 ```
 
 With `SEARCH_API_KEY` configured, this endpoint returns live NewsAPI source
-links. Without a key, it falls back to mocked `example.com` sources so local
-development still works.
+links and attempts to extract clean article text from those URLs. Without a key,
+it falls back to mocked `example.com` sources so local development still works.
 
 ### Frontend
 
@@ -241,6 +243,9 @@ SEARCH_API_BASE_URL=https://newsapi.org/v2/everything
 SEARCH_LANGUAGE=en
 SEARCH_SORT_BY=relevancy
 SEARCH_TIMEOUT_SECONDS=10
+CONTENT_EXTRACTION_TIMEOUT_SECONDS=10
+CONTENT_EXTRACTION_MIN_WORDS=80
+CONTENT_EXTRACTION_USER_AGENT=NewsResearchAgent/0.1
 
 DEFAULT_LLM_PROVIDER=mock
 DEFAULT_MODEL=mock-news-researcher
