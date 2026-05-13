@@ -1,156 +1,230 @@
-# AI-NEWS-AGENT
+# AI News Research Agent
 
-An AI-powered research assistant that turns a news query into a source-backed market research report.
+An autonomous news research assistant that turns a user query into a structured,
+source-backed research report.
 
-This project is designed to go beyond a simple chatbot. The goal is to build a real research pipeline that can search the web, collect reliable articles, extract clean content, summarize findings, identify trends, and save reports for future use.
+This project is being built as a production-style AI application, not a simple
+chatbot wrapper. The backend already supports a research API, live news search
+through NewsAPI, source normalization, duplicate removal, relevance ranking, and
+article content extraction. Future phases add AI summarization, persistence,
+LangGraph orchestration, and multi-agent workflows.
 
-## Why This Project Matters
+## Project Snapshot
 
-Recruiters and engineers can use this project to quickly see my ability to build:
+| Area | Status |
+| --- | --- |
+| Backend API | Implemented with FastAPI |
+| Frontend | Basic Next.js research workspace |
+| Web search | Implemented with NewsAPI |
+| Article extraction | Implemented with clean text extraction |
+| AI summarization | Planned |
+| Database history | Planned |
+| LangGraph workflow | Planned |
+| Multi-agent system | Planned |
 
-- AI workflow systems, not just prompt wrappers
-- FastAPI backend services
-- Next.js frontend applications
-- Research pipelines with search, extraction, summarization, and reporting
-- Scalable architecture for agents, memory, RAG, background jobs, and analytics
+## Why This Project Stands Out
 
-## Current Status
+Most beginner AI projects stop at a chat interface. This project demonstrates a
+real research pipeline with clear engineering boundaries:
 
-The project is currently in the foundation stage.
+- API-first backend design with typed request and response schemas
+- Live web integration through a configurable search provider
+- Source normalization, duplicate removal, and basic ranking
+- Article fetching and clean text extraction with failure handling
+- Modular service architecture ready for summarization, memory, and agents
+- Documentation organized by implementation phase
+- Frontend foundation for a full research product experience
 
-Completed:
+## Current Features
 
-- FastAPI backend setup
-- Backend health check endpoint
-- Mocked `POST /research` API with typed request and response schemas
-- NewsAPI-backed web search service for collecting article source links
-- Search result normalization, duplicate URL removal, and basic relevance ranking
-- Article extraction service for fetching source pages and extracting clean text
-- Extracted article response objects with metadata and word counts
-- Next.js frontend setup
-- Basic research workspace UI
-- Environment configuration structure
-- Clean project folders for future agents, workflows, RAG, memory, routes, services, and schemas
-- Phase 1 setup notes in `docs/phase-01-setup.md`
-- Phase 2 API foundation notes in `docs/phase-02-api-foundation.md`
-- Phase 3 web search notes in `docs/phase-03-web-search.md`
-- Phase 4 article extraction notes in `docs/phase-04-article-extraction.md`
-- Basic ignore rules and backend Ruff configuration
+- `GET /health` backend health check
+- `POST /research` endpoint for research requests
+- Pydantic schemas for request validation and structured responses
+- NewsAPI-backed web search when `SEARCH_API_KEY` is configured
+- Mocked source fallback when no search API key is available
+- Search result normalization into title, URL, source, snippet, and date
+- Duplicate URL removal that ignores common tracking parameters
+- Basic relevance ranking using query terms and article freshness
+- Article extraction service that removes common page chrome
+- Extracted article metadata including title, author, published date, text, word
+  count, and extraction timestamp
+- Backend logging, validation handling, and Ruff configuration
+- Basic Next.js page for the research workspace
 
-In progress / planned:
-
-- AI summarization
-- Markdown report generation
-- Report history with PostgreSQL
-- LangGraph workflow orchestration
-- Multi-agent research system
-
-## Product Vision
-
-Example query:
+## Example Use Case
 
 ```text
 Give me the latest AI startup funding news this week.
 ```
 
-Expected result:
+Expected product flow:
 
-- Relevant news sources
-- Clean article summaries
-- Key findings
-- Emerging trends
-- Source citations
-- Saved research report
+```text
+User query
+  -> FastAPI research endpoint
+  -> NewsAPI web search
+  -> Source normalization and ranking
+  -> Article HTML fetching
+  -> Clean text extraction
+  -> AI summarization and report generation
+  -> Saved report history
+```
 
-## Tech Stack
-
-| Area | Technology |
-| --- | --- |
-| Frontend | Next.js, React, Tailwind CSS |
-| Backend | FastAPI, Python |
-| AI Workflow | LangGraph planned |
-| LLM Providers | OpenAI or Gemini planned |
-| Database | PostgreSQL planned |
-| Vector Search | Chroma planned |
-| Cache / Jobs | Redis + Celery or RQ planned |
-| Deployment | Docker planned |
+The first four pipeline stages are implemented. Summarization, saved reports,
+and advanced agent orchestration are planned next.
 
 ## Architecture
 
-The app follows a simple flow: the user asks a research question, the backend gathers and analyzes news sources, and the frontend shows a clean report.
-
 ```text
-User asks a question
+frontend/
+  Next.js research workspace
         |
         v
-Frontend sends the query
+backend/
+  FastAPI routes
         |
         v
-Backend runs the research pipeline
+  ResearchService
         |
-        v
-Search news -> Read articles -> Summarize -> Find trends
+        +--> WebSearchService
+        |      - NewsAPI integration
+        |      - result normalization
+        |      - deduplication
+        |      - relevance ranking
         |
-        v
-Generate a source-backed report
-        |
-        v
-Save report history and show it to the user
+        +--> ContentExtractionService
+               - article fetching
+               - HTML cleanup
+               - readable text extraction
+               - metadata capture
 ```
 
-### Simple Breakdown
+## Tech Stack
 
-| Part | What It Does |
+| Layer | Technology |
 | --- | --- |
-| Frontend | Lets the user enter a research question and view reports |
-| Backend | Receives the query and controls the research process |
-| Search Service | Finds relevant news articles from the web |
-| Extraction Service | Reads articles and removes unnecessary page content |
-| AI Summarizer | Creates short, useful summaries from the articles |
-| Report Generator | Combines findings into a final Markdown report |
-| Database | Saves reports so users can open them again later |
+| Frontend | Next.js, React, Tailwind CSS |
+| Backend | FastAPI, Python |
+| Validation | Pydantic |
+| Search Provider | NewsAPI |
+| HTTP Client | httpx |
+| Linting | Ruff, ESLint |
+| AI Workflow | LangGraph planned |
+| LLM Providers | OpenAI or Gemini planned |
+| Database | PostgreSQL planned |
+| Vector Store | Chroma planned |
+| Background Jobs | Redis with Celery or RQ planned |
 
-### Planned Agent System
+## API Overview
 
-Later, the research pipeline will be split into focused AI agents:
+### Health Check
 
-| Agent | Job |
-| --- | --- |
-| Query Planner | Understands what the user wants |
-| Web Search Agent | Finds useful sources |
-| Content Agent | Extracts clean article text |
-| Summary Agent | Summarizes the information |
-| Trend Agent | Finds repeated patterns |
-| Report Agent | Writes the final report |
-| Memory Agent | Remembers past research |
+```text
+GET /health
+```
+
+Example response:
+
+```json
+{
+  "status": "ok",
+  "service": "News Research Agent",
+  "environment": "development"
+}
+```
+
+### Research Request
+
+```text
+POST /research
+```
+
+Request body:
+
+```json
+{
+  "query": "Latest AI startup funding news this week",
+  "max_sources": 3,
+  "date_range": {
+    "start_date": "2026-05-01",
+    "end_date": "2026-05-13"
+  }
+}
+```
+
+Response shape:
+
+```json
+{
+  "query": "Latest AI startup funding news this week",
+  "summary": "Found 3 relevant sources...",
+  "report": "# Research Report...",
+  "sources": [
+    {
+      "title": "Article title",
+      "url": "https://example.com/article",
+      "source": "Example News",
+      "snippet": "Article snippet...",
+      "published_date": "2026-05-12"
+    }
+  ],
+  "articles": [
+    {
+      "title": "Article title",
+      "url": "https://example.com/article",
+      "source": "Example News",
+      "author": "Reporter Name",
+      "published_date": "2026-05-12",
+      "extracted_text": "Clean article body text...",
+      "word_count": 850,
+      "extracted_at": "2026-05-13T..."
+    }
+  ],
+  "generated_at": "2026-05-13T..."
+}
+```
 
 ## Project Structure
 
 ```text
-frontend/
-  app/
-  components/
-  hooks/
-  services/
-  styles/
-
 backend/
   app/
     agents/
-    workflows/
-    rag/
     memory/
-    routes/
     models/
+    rag/
+    routes/
+      health.py
+      research.py
     schemas/
+      article.py
+      research.py
+      search.py
     services/
+      content_extraction.py
+      research_service.py
+      web_search.py
     utils/
+    workflows/
     config.py
     main.py
   requirements.txt
+  pyproject.toml
+
+frontend/
+  app/
+    globals.css
+    layout.tsx
+    page.tsx
+  package.json
+
+docs/
+  phase-01-setup.md
+  phase-02-api-foundation.md
+  phase-03-web-search.md
+  phase-04-article-extraction.md
 
 docker/
-docs/
 plan.md
 README.md
 ```
@@ -170,27 +244,10 @@ uvicorn app.main:app --reload
 Health check:
 
 ```text
-GET http://localhost:8000/health
+http://localhost:8000/health
 ```
 
-Expected response:
-
-```json
-{
-  "status": "ok",
-  "service": "News Research Agent",
-  "environment": "development"
-}
-```
-
-Backend lint:
-
-```powershell
-cd backend
-ruff check app
-```
-
-Research request:
+### Research API Smoke Test
 
 ```powershell
 $body = @{
@@ -205,9 +262,9 @@ Invoke-RestMethod `
   -Body $body
 ```
 
-With `SEARCH_API_KEY` configured, this endpoint returns live NewsAPI source
-links and attempts to extract clean article text from those URLs. Without a key,
-it falls back to mocked `example.com` sources so local development still works.
+Without `SEARCH_API_KEY`, the API returns mocked `example.com` sources so local
+development still works. With `SEARCH_API_KEY`, it returns live NewsAPI source
+links and attempts to extract clean article text from those URLs.
 
 ### Frontend
 
@@ -217,8 +274,6 @@ npm install
 npm run dev
 ```
 
-If PowerShell blocks `npm.ps1`, use `npm.cmd install` and `npm.cmd run dev`.
-
 Open:
 
 ```text
@@ -227,7 +282,8 @@ http://localhost:3000
 
 ## Environment Variables
 
-Copy `.env.example` to `.env` and fill values as features are added.
+Create a `.env` file from `.env.example` and fill in the values needed for each
+feature.
 
 ```text
 APP_NAME="News Research Agent"
@@ -243,6 +299,7 @@ SEARCH_API_BASE_URL=https://newsapi.org/v2/everything
 SEARCH_LANGUAGE=en
 SEARCH_SORT_BY=relevancy
 SEARCH_TIMEOUT_SECONDS=10
+
 CONTENT_EXTRACTION_TIMEOUT_SECONDS=10
 CONTENT_EXTRACTION_MIN_WORDS=80
 CONTENT_EXTRACTION_USER_AGENT=NewsResearchAgent/0.1
@@ -255,33 +312,58 @@ DATABASE_URL=
 REDIS_URL=
 ```
 
-## MVP Roadmap
+## Verification
 
-1. Define the research niche and report format
-2. Build the FastAPI and Next.js foundation
-3. Add a research request and response API
-4. Integrate web search
-5. Extract clean article content
-6. Generate AI summaries and Markdown reports
-7. Save reports and research history
-8. Build a usable frontend report experience
+Backend lint:
 
-## Future Improvements
+```powershell
+cd backend
+ruff check app
+```
 
-- LangGraph-based workflow orchestration
-- Multi-agent research pipeline
-- RAG over previous reports
-- Source credibility scoring
-- Trend analytics dashboard
-- Background jobs with live progress
-- Scheduled research reports
-- PDF export and email delivery
-- Dockerized deployment
-- Automated tests
+Backend no-server smoke test:
 
-## What I Want To Demonstrate
+```powershell
+cd backend
+python -c "from fastapi.testclient import TestClient; from app.main import app; client=TestClient(app); r=client.post('/research', json={'query':'Latest AI startup funding news this week','max_sources':3}); print(r.status_code); print(r.json().keys())"
+```
 
-This project shows how I think about building production-style AI applications: start with a reliable end-to-end pipeline, keep the architecture modular, add agents only after the core workflow works, and make every output traceable to real sources.
+Frontend checks:
+
+```powershell
+cd frontend
+npm run lint
+npm run build
+```
+
+## Implementation Roadmap
+
+Completed:
+
+- Phase 1: Project setup and repository structure
+- Phase 2: Backend API foundation
+- Phase 3: Web search system
+- Phase 4: Article extraction
+
+Next:
+
+- Phase 5: AI summarization and Markdown report MVP
+- Phase 6: PostgreSQL database and research history
+- Phase 7: Full frontend research experience
+- Phase 8: LangGraph workflow orchestration
+- Phase 9: Multi-agent architecture
+
+## Engineering Highlights
+
+- The API response shape is designed to survive future phases without large
+  frontend rewrites.
+- Services are isolated by responsibility, which makes the project ready for
+  testing, workflow orchestration, and agent decomposition.
+- External integrations fail gracefully. Missing search credentials use mocked
+  sources, and failed article extractions are skipped rather than breaking the
+  entire research request.
+- The project follows an incremental build plan: reliable pipeline first,
+  advanced AI architecture later.
 
 ## Author
 
