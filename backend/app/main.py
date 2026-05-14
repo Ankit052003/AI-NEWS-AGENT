@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.exception_handlers import request_validation_exception_handler
@@ -7,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.requests import Request
 
 from app.config import get_settings
+from app.database import ensure_db_ready
 from app.routes.health import router as health_router
 from app.routes.research import router as research_router
 
@@ -18,7 +20,15 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-app = FastAPI(title=settings.app_name)
+
+@asynccontextmanager
+async def lifespan(_: FastAPI):
+    ensure_db_ready()
+    logger.info("Database tables are ready")
+    yield
+
+
+app = FastAPI(title=settings.app_name, lifespan=lifespan)
 
 app.add_middleware(
     CORSMiddleware,

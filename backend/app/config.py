@@ -7,11 +7,15 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     app_name: str = "News Research Agent"
     environment: str = "development"
-    cors_origins: list[str] = ["http://localhost:3000"]
+    cors_origins: list[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
     log_level: str = "INFO"
 
     openai_api_key: str | None = None
     gemini_api_key: str | None = None
+    openai_api_base_url: str = "https://api.openai.com/v1/chat/completions"
     search_api_key: str | None = None
     search_provider: str = "newsapi"
     search_api_base_url: str = "https://newsapi.org/v2/everything"
@@ -25,8 +29,10 @@ class Settings(BaseSettings):
     default_llm_provider: str = "mock"
     default_model: str = "mock-news-researcher"
     default_max_sources: int = Field(default=5, ge=1, le=20)
+    llm_timeout_seconds: int = Field(default=30, ge=1, le=120)
+    llm_temperature: float = Field(default=0.2, ge=0, le=2)
 
-    database_url: str | None = None
+    database_url: str = "sqlite:///./news_agent.db"
     redis_url: str | None = None
 
     model_config = SettingsConfigDict(

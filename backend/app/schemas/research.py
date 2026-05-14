@@ -50,10 +50,61 @@ class ResearchSource(SearchResult):
     pass
 
 
+class ArticleSummary(BaseModel):
+    citation_index: int
+    title: str
+    url: str
+    source: str
+    summary: str
+    key_points: list[str] = Field(default_factory=list)
+    published_date: date | None = None
+
+
 class ResearchResponse(BaseModel):
+    query_id: str | None = None
+    report_id: str | None = None
     query: str
     summary: str
     report: str
     sources: list[ResearchSource]
     articles: list[ExtractedArticle] = Field(default_factory=list)
+    article_summaries: list[ArticleSummary] = Field(default_factory=list)
     generated_at: datetime = Field(default_factory=lambda: datetime.now(UTC))
+
+
+class ResearchHistoryItem(BaseModel):
+    id: str
+    query_id: str
+    query: str
+    title: str
+    summary: str
+    status: str
+    source_count: int
+    article_count: int
+    generated_at: datetime
+
+
+class SavedArticle(BaseModel):
+    id: str
+    title: str
+    url: str
+    source: str
+    snippet: str | None = None
+    published_date: date | None = None
+    extracted_text: str | None = None
+    summary: str | None = None
+    word_count: int | None = None
+    created_at: datetime
+
+
+class SavedReportResponse(BaseModel):
+    id: str
+    query_id: str
+    query: str
+    title: str
+    summary: str
+    report: str
+    status: str
+    sources: list[ResearchSource]
+    articles: list[SavedArticle]
+    generated_at: datetime

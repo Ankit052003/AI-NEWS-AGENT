@@ -18,6 +18,7 @@ out/
 
 # Logs and local artifacts
 *.log
+*.db
 dist/
 build/
 coverage/
